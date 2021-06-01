@@ -1,0 +1,85 @@
+import com.plugin.versionplugin.*
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.plugin.version' apply(false)
+}
+
+android {
+    compileSdkVersion BuildConfig.compileSdkVersion
+    buildToolsVersion BuildConfig.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion BuildConfig.minSdkVersion
+        targetSdkVersion BuildConfig.targetSdkVersion
+        versionCode BuildConfig.versionCode
+        versionName BuildConfig.versionName
+
+        testInstrumentationRunner BuildConfig.testInstrumentationRunner
+        consumerProguardFiles BuildConfig.consumerProguardFiles
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+
+
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation BuildConfig.kt_stdlib
+    implementation AndroidX.coreKtx
+    implementation AndroidX.appcompat
+    implementation Google.material
+    testImplementation Testing.junit
+    androidTestImplementation Testing.androidJunit
+    androidTestImplementation Testing.espresso
+    //mqtt
+    implementation ThirdDepend.MQTT.mqtt_client
+    implementation ThirdDepend.MQTT.mqtt_service
+    //Gson
+    implementation Google.gson
+    //数据存储
+    implementation ThirdDepend.mmkv
+
+    //Room
+    implementation AndroidX.Room.ktx
+    implementation AndroidX.Room.runtime
+    kapt AndroidX.Room.compiler
+
+    //协程
+    implementation ThirdDepend.Coroutines.coroutines_core
+    implementation ThirdDepend.Coroutines.coroutines_android
+
+    //网络
+    implementation ThirdDepend.OkHttp.okhttp
+    implementation ThirdDepend.Retrofit.retrofit
+    implementation ThirdDepend.Retrofit.convertGson
+
+    //ARouter
+    implementation ThirdDepend.arouter_api
+    kapt ThirdDepend.arouter_compiler
+
+    //引用网络
+    implementation project(path: ':lib_network')
+    //基础通用组件
+    implementation project(path: ':lib_base')
+}
