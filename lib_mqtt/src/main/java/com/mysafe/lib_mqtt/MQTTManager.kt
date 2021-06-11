@@ -85,7 +85,7 @@ class MQTTManager {
     /**
      * 处理mqtt其他客户端发送过来的指令
      */
-    private fun receive(mqttMessage: MqttFunctionBean) {
+    fun receive(mqttMessage: MqttFunctionBean) {
         when (mqttMessage.Api) {
             "CleanFileCache" -> {//清除缓存
                 receiveOrder.receive(CleanFileCache())
@@ -99,7 +99,7 @@ class MQTTManager {
             "SyncFaceData" -> {//同步人脸数据
                 val staff = "com.mysafe.msmealorder_staff"
                 val isStaff = BuildConfigImplWrap.getPackage().contentEquals(staff)
-                if (!isStaff){
+                if (!isStaff) {
                     receiveOrder.receive(SyncFaceData(mContext))
                 }
             }
@@ -109,8 +109,12 @@ class MQTTManager {
             "UploadLogs" -> {//上传日志
                 receiveOrder.receive(UploadLogs())
             }
-
-
+            "SyncCreateNewStudent" -> {//新增人脸
+                receiveOrder.receive(AddFaceInfo(mContext, mqttMessage.MsgPara))
+            }
+            "SyncDeleteStudent" -> {//删除人脸
+                receiveOrder.receive(DeleteFaceInfo(mContext, mqttMessage.MsgPara))
+            }
         }
     }
 

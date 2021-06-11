@@ -12,7 +12,7 @@ import com.mysafe.lib_base.sqlite.entity.FaceEntity
  * @Describe:
  */
 object IdentifyEngineImplWrap {
-    @Autowired(name = ConstancePath.BuildConfigPath)
+    @Autowired(name = ConstancePath.IdentifyEnginePath)
     lateinit var service: IdentifyEngineService
 
     init {
@@ -21,5 +21,9 @@ object IdentifyEngineImplWrap {
 
     fun setFaceList(context: Context, list: MutableList<FaceEntity>?) {
         service.setFaceList(context,list)
+    }
+
+    fun addFaceInfo(faceInfo:FaceEntity) {
+        service.addFaceInfo(faceInfo)
     }
 }

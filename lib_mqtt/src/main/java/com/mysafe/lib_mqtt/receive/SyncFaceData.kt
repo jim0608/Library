@@ -54,7 +54,7 @@ class SyncFaceData(private val context: Context) : ExecutiveOrder {
                         repository!!.insertAllFace(list)
                         Log.i(
                             TAG,
-                            "synchronousDataBase2: ${System.currentTimeMillis()} dataBaseList:${repository?.getFacesCount()}"
+                            "synchronousDataBase2: ${System.currentTimeMillis()} dataBaseList:${repository?.getFaceCount()}"
                         )
                         //将当前同步数据的时间保存
                         mmkv.encode("LastSQLDate", getNowDetailTime())

@@ -11,4 +11,5 @@ import com.mysafe.lib_base.sqlite.entity.FaceEntity
  */
 interface IdentifyEngineService:IProvider {
     fun setFaceList(context: Context, list:MutableList<FaceEntity>?)
+    fun addFaceInfo(faceInfo:FaceEntity)
 }

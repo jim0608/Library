@@ -42,7 +42,7 @@ object ThirdDepend {
 
     //mqtt
     object MQTT {
-        const val mqtt_client = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2"
+        const val mqtt_client = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.4"
         const val mqtt_service = "org.eclipse.paho:org.eclipse.paho.android.service:1.1.1"
     }
 

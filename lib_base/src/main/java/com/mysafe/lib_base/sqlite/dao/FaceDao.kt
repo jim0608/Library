@@ -32,6 +32,12 @@ interface FaceDao {
     val faceCount: Int
 
     /**
+     * 获取所有Id
+     */
+    @Query("SELECT id FROM face_table")
+    fun getFaceIds():List<Int>
+
+    /**
      * 更新已注册的人脸信息
      *
      * @param faceEntity 已注册的人脸信息
@@ -48,6 +54,12 @@ interface FaceDao {
      */
     @Delete
     fun deleteFace(faceEntity: FaceEntity?): Int
+
+    /**
+     * 批量删除指定ID人脸
+     */
+    @Query("DELETE from face_table WHERE id IN (:ids)")
+    fun deleteById(ids: List<Int>): Int
 
     /**
      * 删除所有已注册的人脸

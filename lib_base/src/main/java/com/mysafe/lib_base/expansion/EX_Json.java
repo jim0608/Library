@@ -114,6 +114,7 @@ public class EX_Json {
      */
     public static <T> List<Map<String, T>> gsonToListMaps(String gsonString) {
         List<Map<String, T>> list = null;
+
         if (gson != null) {
             list = gson.fromJson(gsonString,
                     new TypeToken<List<Map<String, T>>>() {

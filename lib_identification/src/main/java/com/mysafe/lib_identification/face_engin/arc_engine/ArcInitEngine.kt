@@ -103,6 +103,11 @@ class ArcInitEngine {
         this.faceRegisterInfoList?.addAll(faceRegisterInfoList)
     }
 
+    fun addFace(faceInfo: FaceEntity) {
+        this.faceRegisterInfoList?.clear()
+        this.faceRegisterInfoList?.add(faceInfo)
+    }
+
     /**
      * 在特征库中搜索
      *

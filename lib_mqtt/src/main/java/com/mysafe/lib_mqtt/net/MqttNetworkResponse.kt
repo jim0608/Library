@@ -19,6 +19,11 @@ class MqttNetworkResponse : PublicRequestNetwork() {
     suspend fun syncDeviceInfo(map: Map<String, String>) =
         netResult { service.uploadDevicesInfo(map).await() }
 
+    /**
+     * 检查更新
+     */
+    suspend fun checkVersion() =
+        netResult { service.checkVersion().await() }
 
     /**
      * 更新人脸数据
@@ -27,8 +32,8 @@ class MqttNetworkResponse : PublicRequestNetwork() {
         netResult { service.updateFaceData(body).await() }
 
     /**
-     * 检查更新
+     * 根据学生ID获取学生人脸信息
      */
-    suspend fun checkVersion() =
-        netResult { service.checkVersion().await() }
+    suspend fun getFaceById(body: MutableMap<String, Any>) =
+        netResult { service.getFaceById(body).await() }
 }

@@ -88,5 +88,7 @@ dependencies {
     //ARouter
     implementation ThirdDepend.arouter_api
     kapt ThirdDepend.arouter_compiler
+    // crash dump
+    implementation ThirdDepend.XCrash
 
 }

@@ -14,42 +14,68 @@ import com.mysafe.lib_mqtt.net.MqttNetworkResponse
  */
 class SyncFaceDataRepository(private val dao: FaceDao) {
     private val TAG = "TAG_SyncFaceDataRepository"
-    fun syncFaceData() {
-    }
+    private val repository = MqttNetworkResponse()
+
+    /**
+     * 人脸同步
+     */
     suspend fun updateData(date: String): BaseModel<MutableList<FaceEntity>> {
         val data = hashMapOf<String, Any>()
         data["date"] = date
-        val sqlFace = MqttNetworkResponse().upDateSqlFace(data)
+        val sqlFace = repository.upDateSqlFace(data)
 
-        return strBase64ToByte(sqlFace)
+        return faceInfosToFaceEntity(sqlFace)
     }
 
-    suspend fun getFaceCount(): Int = dao.faceCount
-
-
-    suspend fun insertAllFace(list: MutableList<FaceEntity>) {
-        dao.insertAll(list)
-//        Log.i("TAG_insertAllFace", "insertAllFace2: ${System.currentTimeMillis()}")
+    /**
+     * 通过ID获取人脸信息
+     */
+    suspend fun getFaceById(id: String): BaseModel<FaceEntity> {
+        val data = hashMapOf<String, Any>()
+        data["studentId"] = id
+        val sqlFace = repository.getFaceById(data)
+        return faceInfoToFaceEntity(sqlFace)
     }
 
-    suspend fun getAllFaces(): MutableList<FaceEntity>? {
-        return dao.allFaces
-    }
-    suspend fun getFacesCount(): Int {
-        return dao.faceCount
-    }
+    fun getFaceCount(): Int = dao.faceCount
 
-    private fun strBase64ToByte(sqlFace: BaseModel<MutableList<ServiceFaceEntity>?>): BaseModel<MutableList<FaceEntity>> {
+    fun getAllFaces(): MutableList<FaceEntity>? = dao.allFaces
+
+    fun getFaceIds(): List<Int> = dao.getFaceIds()
+
+    fun insertAllFace(list: MutableList<FaceEntity>) = dao.insertAll(list)
+
+    fun insertFace(faceEntity: FaceEntity) = dao.insert(faceEntity)
+
+    fun deleteFaces(ids: List<Int>) = dao.deleteById(ids)
+
+
+    /**
+     * 将对应的ServiceFaceEntity类型数据转换为FaceEntity类型数据
+     */
+    private fun faceInfosToFaceEntity(sqlFace: BaseModel<MutableList<ServiceFaceEntity>?>): BaseModel<MutableList<FaceEntity>> {
         val faceData: MutableList<FaceEntity> = ArrayList()
-        if(sqlFace.data == null){
+        if (sqlFace.data == null) {
             return BaseModel(sqlFace.isSuccess, sqlFace.code, sqlFace.message, faceData)
         }
         for (e in sqlFace.data!!) {
             val feature = UtilHelper.base64String2ByteFun(e.featureData)
-            val faceEntity = FaceEntity(e.id, e.userName, e.userNum, e.imagePath, feature, e.registerTime)
+            val faceEntity =
+                FaceEntity(e.id, e.userName, e.userNum, e.imagePath, feature, e.registerTime)
             faceData.add(faceEntity)
         }
 
         return BaseModel(sqlFace.isSuccess, sqlFace.code, sqlFace.message, faceData)
+    }
+
+    private fun faceInfoToFaceEntity(sqlFace: BaseModel<ServiceFaceEntity?>): BaseModel<FaceEntity> {
+        if (sqlFace.data == null) {
+            return BaseModel(sqlFace.isSuccess, sqlFace.code, sqlFace.message, null)
+        }
+        val faceEntity = sqlFace.data!!.let {
+            val feature = UtilHelper.base64String2ByteFun(it.featureData)
+            FaceEntity(it.id, it.userName, it.userNum, it.imagePath, feature, it.registerTime)
+        }
+        return BaseModel(sqlFace.isSuccess, sqlFace.code, sqlFace.message, faceEntity)
     }
 }

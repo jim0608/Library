@@ -22,6 +22,12 @@ interface SyncDeviceInfoImpl {
     fun uploadDevicesInfo(@Body body: Map<String, String>): Call<BaseModel<BaseDataEntity>>
 
     /**
+     * 检查更新
+     */
+    @POST("ordermeal/om_checkver")
+    fun checkVersion():Call<BaseModel<VersionConfigBean>>
+
+    /**
      * 更新人脸信息
      */
     @POST("ordermeal/om_downloadfaceddata")
@@ -29,8 +35,8 @@ interface SyncDeviceInfoImpl {
             Call<BaseModel<MutableList<ServiceFaceEntity>>>
 
     /**
-     * 检查更新
+     * 根据学生ID获取学生人脸信息
      */
-    @POST("ordermeal/om_checkver")
-    fun checkVersion():Call<BaseModel<VersionConfigBean>>
+    @POST("ordermeal/om_getfacefromid")
+    fun getFaceById(@Body body: MutableMap<String, Any>):Call<BaseModel<ServiceFaceEntity>>
 }
