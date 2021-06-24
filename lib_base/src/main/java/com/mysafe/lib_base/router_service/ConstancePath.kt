@@ -11,4 +11,7 @@ object ConstancePath {
 
     //initArc(人脸识别引擎)
     const val IdentifyEnginePath = "/identify/IdentifyEngineService"
+
+    //配餐数据同步
+    const val UserIdPath = "/identify/UserIdPath"
 }

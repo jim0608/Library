@@ -21,6 +21,13 @@ object DeviceMacInfo {
     private val TAG = "TAG_DeviceMacInfo"
 
     /**
+     * 判断是否是mac地址
+     */
+    fun isMac(mac: String): Boolean {
+        val trueMacAddress = Regex("([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}")
+        return mac.matches(trueMacAddress)
+    }
+    /**
      * 获取mac地址（适配所有Android版本）
      * @return
      */

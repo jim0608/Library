@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import com.tencent.mmkv.MMKV
 import org.eclipse.paho.client.mqttv3.internal.wire.MqttReceivedMessage
 
 /**
@@ -13,6 +14,7 @@ import org.eclipse.paho.client.mqttv3.internal.wire.MqttReceivedMessage
  */
 class MqttServer: Service() {
     private val TAG = "TAG_MqttServer"
+    private val mmkv = MMKV.defaultMMKV()
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -23,7 +25,8 @@ class MqttServer: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        MQTTManager.instance.initMqtt(this," ")
+        val clientId = mmkv.decodeString("deviceNo")
+//        MQTTManager.instance.initMqtt(this, "100100", clientId)
         Log.i(TAG, "onStartCommand: ")
         return super.onStartCommand(intent, flags, startId)
     }

@@ -2,6 +2,8 @@
 <manifest package="com.mysafe.lib_mqtt"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <application>
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>

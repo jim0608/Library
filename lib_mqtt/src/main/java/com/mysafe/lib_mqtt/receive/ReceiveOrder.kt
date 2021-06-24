@@ -5,7 +5,7 @@ package com.mysafe.lib_mqtt.receive
  * @Date on 2021/4/19
  * @Describe:处理mqtt其他客户端发送过来的指令
  */
-class ReceiveOrder() {
+class ReceiveOrder {
     private val TAG = "TAG_ReceiveOrder"
     /**
      * 消息获取

@@ -6,6 +6,7 @@ import com.mysafe.lib_mqtt.entity.MQTTEnum
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.MqttCallback
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import java.io.IOException
 import java.security.*
@@ -26,8 +27,8 @@ class MQTTController(
     userName: String? = "admin",
     password: String? = "password",
     isCleanSession: Boolean? = true,
-    connectionTimeout: Int? = 10,
-    keepAliveInterval: Int? = 20
+    connectionTimeout: Int? = 20,
+    keepAliveInterval: Int? = 10
 ) {
     private val TAG = "TAG_MQTTController"
     private var mMQTTAndroidClient: MqttAndroidClient? = null
@@ -38,13 +39,13 @@ class MQTTController(
     private val mPassword = password
     private val mClientId = clientId
     private val cleanSession = isCleanSession ?: false
-    private val mConnectTimeout = connectionTimeout ?: 10
-    private val mKeepAliveInterval = keepAliveInterval ?: 20
+    private val mConnectTimeout = connectionTimeout ?: 20
+    private val mKeepAliveInterval = keepAliveInterval ?: 10
 
     /**
      * init
      */
-    fun initMQTT(context: Context, callback: MqttCallback) {
+    fun initMQTT(context: Context, callback: MqttCallbackExtended) {
         val caCrtFileI = context.resources.openRawResource(R.raw.cancanan)
         mMQTTAndroidClient = MqttAndroidClient(context, mUrl, mClientId)
         mMQTTAndroidClient?.setCallback(callback)
