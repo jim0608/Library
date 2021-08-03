@@ -102,7 +102,7 @@ class FaceCameraHelper(
         }
     }
 
-    @SuppressLint("UnsafeExperimentalUsageError", "WrongConstant")
+    @SuppressLint("UnsafeExperimentalUsageError", "WrongConstant", "UnsafeOptInUsageError")
     fun bindToLifecycleAfterViewMeasured() {
         if (mNewLifecycle == null) {
             return
@@ -213,7 +213,7 @@ class FaceCameraHelper(
         mCameraSelector = CameraSelector.Builder().requireLensFacing(mCameraLensFacing!!).build()
     }
 
-    @SuppressLint("UnsafeExperimentalUsageError")
+    @SuppressLint("UnsafeExperimentalUsageError", "UnsafeOptInUsageError")
     private fun getCameraSelectById() {
         mCameraSelector = CameraSelector.Builder().addCameraFilter(CameraIdFilter(mCameraId!!)).build()
     }

@@ -1,4 +1,4 @@
-package com.mysafe.msmealorder_customer.activitys.camera.camera_view
+package com.mysafe.lib_identification.camera_view
 
 import android.content.Context
 import android.graphics.*
@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import com.mysafe.lib_identification.camera_view.FaceRectHelper
-import com.mysafe.lib_identification.face_engin.FaceRectInfo
+import com.mysafe.lib_base.base.identify.FaceRectInfo
 
 /**
  * @author Create By 张晋铭

@@ -15,7 +15,7 @@ object BuildConfig {
     const val testApplicationId="org.eclipse.paho.android.service.test"
     const val consumerProguardFiles="consumer-rules.pro"
 
-    var versionName = "1.2"
+    var versionName = "1.3"
     var versionCode = 3
 
     var gradle_version = "4.1.1"

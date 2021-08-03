@@ -3,7 +3,7 @@ package com.mysafe.lib_identification.face_engin.arc_engine
 import android.content.Context
 import android.util.Log
 import com.mysafe.lib_identification.face_engin.CameraFaceEngine
-import com.mysafe.lib_identification.face_engin.FaceRectInfo
+import com.mysafe.lib_base.base.identify.FaceRectInfo
 import com.mysafe.lib_identification.helper.IRecogniseResultCallback
 
 /**

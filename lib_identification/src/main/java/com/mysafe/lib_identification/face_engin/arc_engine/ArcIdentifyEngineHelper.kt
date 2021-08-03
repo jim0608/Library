@@ -13,7 +13,7 @@ import com.mysafe.lib_identification.enums.LivenessType
 import com.mysafe.lib_identification.enums.RecognizeColor
 import com.mysafe.lib_identification.enums.RequestFeatureStatus
 import com.mysafe.lib_identification.face_engin.EngineCodeEnum
-import com.mysafe.lib_identification.face_engin.FaceRectInfo
+import com.mysafe.lib_base.base.identify.FaceRectInfo
 import com.mysafe.lib_identification.helper.*
 import com.mysafe.lib_identification.model.CompareResult
 import com.mysafe.lib_identification.model.FacePreviewInfo
@@ -103,12 +103,14 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
         if (enableFaceQualityDetect) {
             ftEngineMask = ftEngineMask or FaceEngine.ASF_IMAGEQUALITY
         }
-        val ftInitCode = ftEngine!!.init(context,
-                DetectMode.ASF_DETECT_MODE_VIDEO,
-                DetectFaceOrientPriority.ASF_OP_ALL_OUT,
-                16,
-                DefaultConfig.DEFAULT_FACE_SIZE * 2,
-                ftEngineMask)
+        val ftInitCode = ftEngine!!.init(
+            context,
+            DetectMode.ASF_DETECT_MODE_VIDEO,
+            DetectFaceOrientPriority.ASF_OP_ALL_OUT,
+            16,
+            DefaultConfig.DEFAULT_FACE_SIZE * 2,
+            ftEngineMask
+        )
         if (initEngineCallback != null) {
             if (ftInitCode != ErrorInfo.MOK) {
                 initEngineCallback.onFailed(ftInitCode)
@@ -120,12 +122,14 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
 
     private fun initFrEngine(context: Context, initEngineCallback: IInitEngineCallback?) {
         frEngine = FaceEngine()
-        val frInitCode = frEngine!!.init(context,
-                DetectMode.ASF_DETECT_MODE_IMAGE,
-                DetectFaceOrientPriority.ASF_OP_0_ONLY,
-                16,
-                DefaultConfig.DEFAULT_FACE_SIZE * 2,
-                FaceEngine.ASF_FACE_RECOGNITION)
+        val frInitCode = frEngine!!.init(
+            context,
+            DetectMode.ASF_DETECT_MODE_IMAGE,
+            DetectFaceOrientPriority.ASF_OP_0_ONLY,
+            16,
+            DefaultConfig.DEFAULT_FACE_SIZE * 2,
+            FaceEngine.ASF_FACE_RECOGNITION
+        )
         if (initEngineCallback != null) {
             if (frInitCode != ErrorInfo.MOK) {
                 initEngineCallback.onFailed(frInitCode)
@@ -138,12 +142,14 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
     private fun initFlEngine(context: Context, initEngineCallback: IInitEngineCallback?) {
         if (enableLiveness) {
             flEngine = FaceEngine()
-            val flInitCode = flEngine!!.init(context,
-                    DetectMode.ASF_DETECT_MODE_IMAGE,
-                    DetectFaceOrientPriority.ASF_OP_0_ONLY,
-                    16,
-                    DefaultConfig.DEFAULT_FACE_SIZE * 2,
-                    if (livenessType == LivenessType.RGB) FaceEngine.ASF_LIVENESS else FaceEngine.ASF_IR_LIVENESS)
+            val flInitCode = flEngine!!.init(
+                context,
+                DetectMode.ASF_DETECT_MODE_IMAGE,
+                DetectFaceOrientPriority.ASF_OP_0_ONLY,
+                16,
+                DefaultConfig.DEFAULT_FACE_SIZE * 2,
+                if (livenessType == LivenessType.RGB) FaceEngine.ASF_LIVENESS else FaceEngine.ASF_IR_LIVENESS
+            )
             if (initEngineCallback != null) {
                 if (flInitCode != ErrorInfo.MOK) {
                     initEngineCallback.onFailed(flInitCode)
@@ -169,30 +175,30 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
 
             Log.d("TAG_Identify", "init: initEngine 2.1: " + SystemClock.currentThreadTimeMillis())
             val configuration = RecognizeConfiguration.Builder()
-                    .enableLiveness(enableLiveness)
-                    .enableImageQuality(enableFaceQualityDetect)
-                    .maxDetectFaces(DefaultConfig.DEFAULT_FACE_SIZE)
-                    .keepMaxFace(DefaultConfig.DEFAULT_MAX_FACE)
-                    .similarThreshold(0.80f)
-                    .imageQualityThreshold(0.35f)
-                    .livenessParam(LivenessParam(0.50f, 0.70f))
-                    .build()
+                .enableLiveness(enableLiveness)
+                .enableImageQuality(enableFaceQualityDetect)
+                .maxDetectFaces(DefaultConfig.DEFAULT_FACE_SIZE)
+                .keepMaxFace(DefaultConfig.DEFAULT_MAX_FACE)
+                .similarThreshold(0.80f)
+                .imageQualityThreshold(0.35f)
+                .livenessParam(LivenessParam(0.50f, 0.70f))
+                .build()
 
             faceHelper = MsArcFaceHelper.Builder()
-                    .ftEngine(ftEngine)
-                    .frEngine(frEngine)
-                    .flEngine(flEngine)
-                    .frQueueSize(DefaultConfig.DEFAULT_FACE_SIZE)
-                    .flQueueSize(DefaultConfig.DEFAULT_FACE_SIZE)
-                    .recognizeCallback(this)
-                    .recognizeConfiguration(configuration)
-                    .trackedFaceCount(trackedFaceCount ?: 0)
-                    .dualCameraFaceInfoTransformer { faceInfo: FaceInfo? ->
-                        val irFaceInfo = FaceInfo(faceInfo)
-                        irFaceInfo.rect.offset(0, 0)
-                        irFaceInfo
-                    }
-                    .build()
+                .ftEngine(ftEngine)
+                .frEngine(frEngine)
+                .flEngine(flEngine)
+                .frQueueSize(DefaultConfig.DEFAULT_FACE_SIZE)
+                .flQueueSize(DefaultConfig.DEFAULT_FACE_SIZE)
+                .recognizeCallback(this)
+                .recognizeConfiguration(configuration)
+                .trackedFaceCount(trackedFaceCount ?: 0)
+                .dualCameraFaceInfoTransformer { faceInfo: FaceInfo? ->
+                    val irFaceInfo = FaceInfo(faceInfo)
+                    irFaceInfo.rect.offset(0, 0)
+                    irFaceInfo
+                }
+                .build()
 
         }
     }
@@ -230,19 +236,31 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
      * @param doRecognize 是否进行识别
      * @return 当前帧的检测结果信息
      */
-    fun setPreviewFrame(nv21: ByteArray, widthSize: Int, heightSize: Int, doRecognize: Boolean): MutableList<FaceRectInfo>? =
-            if (faceHelper != null) {
-                if (livenessType == LivenessType.IR) {
-                    null
-                } else getFaceInfo(nv21, widthSize, heightSize, doRecognize)
-            } else {
+    fun setPreviewFrame(
+        nv21: ByteArray,
+        widthSize: Int,
+        heightSize: Int,
+        doRecognize: Boolean
+    ): MutableList<FaceRectInfo>? =
+        if (faceHelper != null) {
+            if (livenessType == LivenessType.IR) {
                 null
-            }
+            } else getFaceInfo(nv21, widthSize, heightSize, doRecognize)
+        } else {
+            null
+        }
 
-    private fun getFaceInfo(nv21: ByteArray, widthSize: Int, heightSize: Int, doRecognize: Boolean): MutableList<FaceRectInfo> {
-        val previewInfoList = faceHelper!!.onPreviewFrame(nv21, null, widthSize, heightSize, doRecognize)
+    private fun getFaceInfo(
+        nv21: ByteArray,
+        widthSize: Int,
+        heightSize: Int,
+        doRecognize: Boolean
+    ): MutableList<FaceRectInfo> {
+
+        val previewInfoList =
+            faceHelper!!.onPreviewFrame(nv21, null, widthSize, heightSize, doRecognize)
         faceInfoList.clear()
-        if (previewInfoList!=null){
+        if (previewInfoList != null) {
             recogniseCallback?.onFaceSearch(previewInfoList.size > 0)
             faceSize = previewInfoList.size
         }
@@ -275,12 +293,14 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
         }
 
         return FaceRectInfo(
-                previewInfo.rgbTransformedRect,
-                GenderInfo.UNKNOWN,
-                AgeInfo.UNKNOWN_AGE,
-                LivenessInfo.UNKNOWN,
-                color,
-                name ?: ""
+            previewInfo.rgbTransformedRect,
+            0,
+            0,
+            GenderInfo.UNKNOWN,
+            AgeInfo.UNKNOWN_AGE,
+            LivenessInfo.UNKNOWN,
+            color,
+            name ?: ""
         )
     }
 
@@ -291,11 +311,16 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
         this.recogniseCallback = recogniseCallback
     }
 
-    fun setRecognize(){
+    fun setRecognize() {
         faceHelper?.setRecognize()
     }
 
-    override fun onRecognized(isHavePerson: Boolean, compareResult: CompareResult?, liveness: Int?, similarPass: Boolean) {
+    override fun onRecognized(
+        isHavePerson: Boolean,
+        compareResult: CompareResult?,
+        liveness: Int?,
+        similarPass: Boolean
+    ) {
         //识别未查询到人脸
 
         //识别未查询到人脸
@@ -305,11 +330,13 @@ class ArcIdentifyEngineHelper(private val mContext: Context) : IRecognizeCallBac
             //如果通过识别阈值
             val userNum = compareResult?.faceEntity?.userNum ?: ""
             val userName = compareResult?.faceEntity?.userName ?: ""
-            recogniseCallback?.onFaceSuccess(compareResult?.trackId ?: 0,
-                    liveness == LivenessInfo.ALIVE,
-                    userNum,
-                    userName,
-                    similarPass)
+            recogniseCallback?.onFaceSuccess(
+                compareResult?.trackId ?: 0,
+                liveness == LivenessInfo.ALIVE,
+                userNum,
+                userName,
+                similarPass
+            )
         }
     }
 

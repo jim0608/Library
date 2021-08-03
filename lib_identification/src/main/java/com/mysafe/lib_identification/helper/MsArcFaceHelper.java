@@ -668,7 +668,7 @@ public class MsArcFaceHelper implements IFaceListener {
                                 ChangeRecognizeStatus(trackId, RequestFeatureStatus.SUCCEED);
                                 successTime = System.currentTimeMillis();
                                 isRecognize = false;
-                            } else {
+                            } else {//在这里相同的trackId失败三次提示识别失败
                                 setName(trackId, "未通过：NOT_REGISTERED");
                                 RetryRecognizeDelayed(trackId,FAILED);
                             }
@@ -877,7 +877,9 @@ public class MsArcFaceHelper implements IFaceListener {
                     long frStartTime = System.currentTimeMillis();
                     int frCode;
                     synchronized (frEngine) {
+                        Log.i(TAG, "run1: "+System.currentTimeMillis());
                         frCode = frEngine.extractFaceFeature(nv21Data, width, height, format, faceInfo, faceFeature);
+                        Log.i(TAG, "run2: "+System.currentTimeMillis());
                     }
                     if (frCode == ErrorInfo.MOK) {
                         onFaceFeatureInfoGet(faceFeature, trackId, frCode);

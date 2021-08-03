@@ -4,7 +4,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'com.plugin.version' apply false
+    id 'com.plugin.version' apply true
 }
 android {
     compileSdkVersion BuildConfig.compileSdkVersion
@@ -18,12 +18,6 @@ android {
 
         testInstrumentationRunner BuildConfig.testInstrumentationRunner
         consumerProguardFiles BuildConfig.consumerProguardFiles
-
-        kapt {
-            arguments {
-                arg("AROUTER_MODULE_NAME", project.getName())
-            }
-        }
     }
 
     buildTypes {
@@ -36,21 +30,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
     }
-    
-    android {
-        dataBinding {
-            enabled = true
-        }
-    }
-
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation BuildConfig.kt_stdlib
     implementation AndroidX.coreKtx
     implementation AndroidX.appcompat
@@ -59,40 +45,8 @@ dependencies {
     androidTestImplementation Testing.androidJunit
     androidTestImplementation Testing.espresso
 
-
-    implementation AndroidX.constraintlayout
-
-    implementation AndroidX.Lifecycle.viewModel
-    implementation AndroidX.Lifecycle.runtime
-    implementation AndroidX.Lifecycle.extensions
-
-    //Room
-    implementation AndroidX.Room.ktx
-    implementation AndroidX.Room.runtime
-    kapt AndroidX.Room.compiler
-
-    //图片加载
-    implementation ThirdDepend.Glide.glide
-
-    // rxjava
-    implementation ThirdDepend.rxjava2
-    implementation ThirdDepend.rxandroid
-
-    //OKHTTP
-    implementation ThirdDepend.OkHttp.okhttp
-    implementation ThirdDepend.OkHttp.loggingInterceptor
-    //Gson
-    implementation Google.gson
     //协程
     implementation ThirdDepend.Coroutines.coroutines_core
     implementation ThirdDepend.Coroutines.coroutines_android
-
-    //数据存储
-    implementation ThirdDepend.mmkv
-    //ARouter
-    implementation ThirdDepend.arouter_api
-    kapt ThirdDepend.arouter_compiler
-    // crash dump
-    implementation ThirdDepend.XCrash
-
+    implementation project(path: ':lib_base')
 }

@@ -22,10 +22,11 @@ import androidx.camera.core.impl.utils.futures.Futures
 import androidx.camera.view.PreviewView
 import androidx.camera.view.PreviewView.StreamState
 import androidx.lifecycle.*
+import com.mysafe.lib_base.base.identify.FaceRectInfo
 import com.mysafe.lib_identification.R
 import com.mysafe.lib_identification.camera_view.CameraCallback
 import com.mysafe.lib_identification.camera_view.FaceRectHelper
-import com.mysafe.lib_identification.face_engin.FaceRectInfo
+import com.mysafe.lib_identification.camera_view.FaceRectView
 
 
 /**
@@ -88,6 +89,7 @@ class FaceCameraView @JvmOverloads constructor(
 
     //预览界面是否左右翻转
     private var isXMirror = false
+    private var isMirrorHorizontal = false
     private var isYMirror = false
 
     // For accessibility event
@@ -252,8 +254,9 @@ class FaceCameraView @JvmOverloads constructor(
     /**
      * 是否根据预览界面大小自动分配分辨率
      */
-    fun isAutoCameraSize(isAutoSize: Boolean = true) {
+    fun isAutoCameraSize(isAutoSize: Boolean = true): FaceCameraView {
         this.isAutoSize = isAutoSize
+        return this
     }
 
     /**
@@ -324,7 +327,6 @@ class FaceCameraView @JvmOverloads constructor(
         this.isXMirror = isXMirror
         this.isYMirror = isYMirror
         rectHelper?.isMirror = isXMirror
-        rectHelper?.isMirrorHorizontal = isXMirror
         rectHelper?.isMirrorVertical = isYMirror
 
         if (isXMirror) {
@@ -333,6 +335,12 @@ class FaceCameraView @JvmOverloads constructor(
         if (isYMirror) {
             scaleY = -1f
         }
+        return this
+    }
+
+    fun setMirrorHorizontal(isMirrorHorizontal: Boolean = false): FaceCameraView {
+        this.isMirrorHorizontal = isMirrorHorizontal
+        rectHelper?.isMirrorHorizontal = isXMirror
         return this
     }
 
@@ -383,7 +391,7 @@ class FaceCameraView @JvmOverloads constructor(
                                 previewWidth, previewHeight,
                                 measuredWidth, measuredHeight,
                                 getDisplayRotationDegrees(), mCameraHelper.getLensFacing(),
-                                isXMirror, isXMirror, isYMirror)
+                                isXMirror, isMirrorHorizontal, isYMirror)
                     }
                 }
             }

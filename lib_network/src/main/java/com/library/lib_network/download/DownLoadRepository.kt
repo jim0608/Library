@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collect
 class DownLoadRepository : PublicRequestNetwork() {
     private val TAG = "TAG_RetrofitUpDownFile"
 
+    //文件下载
     suspend fun downLoadFile(
         url: String,
         downloadBuild: DownloadBuild,

@@ -19,7 +19,8 @@ import java.util.concurrent.locks.ReentrantLock
 class CameraImageAnalyze(private var cameraCallback: CameraCallback) : ImageAnalysis.Analyzer {
     private val TAG = "TAG_StrockImageAnalyze"
     private val lock: ReentrantLock = ReentrantLock()
-    private val analyzeBean:YUV420spAnalyzeBean = YUV420spAnalyzeBean()
+    private val analyzeDefault: YUV420spAnalyzeBean = YUV420spAnalyzeBean()
+    private lateinit var analyzeBean: YUV420spAnalyzeBean
     private var width: Int = 0
     private var height: Int = 0
     private var clipW: Int = 0
@@ -27,21 +28,24 @@ class CameraImageAnalyze(private var cameraCallback: CameraCallback) : ImageAnal
     private var imgRational: Rational? = null
     private var viewRect: Rational? = null
     override fun analyze(image: ImageProxy) {
-            lock.lock()
+        lock.lock()
         try {
-            analyzeBean.imgWidth = image.width
-            analyzeBean.imgHeight = image.height
-            analyzeBean.rotateDegree = image.imageInfo.rotationDegrees
-            analyzeBean.nv21 = yuv420_888ToNv21(image)
+            analyzeDefault.imgWidth = image.width
+            analyzeDefault.imgHeight = image.height
+            analyzeDefault.rotateDegree = image.imageInfo.rotationDegrees
+            analyzeDefault.nv21 = yuv420_888ToNv21(image)
             image.close()
 
-            if (width != 0 && height !=0 && analyzeBean.nv21 != null) {
+            if (width != 0 && height != 0 && analyzeDefault.nv21 != null) {
                 try {
-                    analyzeBean.nv21 = clipNv21(analyzeBean.nv21!!, analyzeBean.imgWidth, analyzeBean.imgHeight)
-                }catch (e:Exception){
+                    analyzeDefault.nv21 =
+                        clipNv21(analyzeDefault.nv21!!, analyzeDefault.imgWidth, analyzeDefault.imgHeight)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                     Log.i(TAG, "analyze: ${e.message}")
                 }
             }
+            analyzeBean = analyzeDefault.copy()
             cameraCallback.cameraPreviewFrame(analyzeBean)
         } finally {
             lock.unlock()
@@ -57,7 +61,7 @@ class CameraImageAnalyze(private var cameraCallback: CameraCallback) : ImageAnal
     /**
      * YUV_420_888转NV21
      *
-     * @param image CameraX ImageProxy
+     * @param imageProxy CameraX ImageProxy
      * @return byte array
      */
 
@@ -129,24 +133,40 @@ class CameraImageAnalyze(private var cameraCallback: CameraCallback) : ImageAnal
             if (clipW % 4 != 0) {
                 clipW = clipW + 4 - clipW % 4
             }
-            analyzeBean.imgHeight = heightSize
-            analyzeBean.imgWidth = clipW
-            nv212 = NV21Utils.clipNV21(nv21, widthSize, heightSize, (widthSize - clipW) / 2, 0, clipW, heightSize)
+            analyzeDefault.imgHeight = heightSize
+            analyzeDefault.imgWidth = clipW
+            nv212 = NV21Utils.clipNV21(
+                nv21,
+                widthSize,
+                heightSize,
+                (widthSize - clipW) / 2,
+                0,
+                clipW,
+                heightSize
+            )
         } else {
             viewRect = Rational(height, width * imgRational!!.numerator / imgRational!!.denominator)
             clipH = heightSize * viewRect!!.numerator / viewRect!!.denominator
             if (clipH % 4 != 0) {
                 clipH = clipH + 4 - clipH % 4
             }
-            analyzeBean.imgWidth = widthSize
-            analyzeBean.imgHeight = clipH
-            nv212 = NV21Utils.clipNV21(nv21, widthSize, heightSize, 0, (heightSize - clipH) / 2, widthSize, clipH)
+            analyzeDefault.imgWidth = widthSize
+            analyzeDefault.imgHeight = clipH
+            nv212 = NV21Utils.clipNV21(
+                nv21,
+                widthSize,
+                heightSize,
+                0,
+                (heightSize - clipH) / 2,
+                widthSize,
+                clipH
+            )
 
         }
 
         if (nv212 == null) {
-            analyzeBean.imgWidth = widthSize
-            analyzeBean.imgHeight = heightSize
+            analyzeDefault.imgWidth = widthSize
+            analyzeDefault.imgHeight = heightSize
             return nv21
         }
         return nv212

@@ -112,13 +112,13 @@ object AndroidX {
     }
 
     object CameraX{
-        private const val camerax_version = "1.0.0-rc04"
+        private const val camerax_version = "1.0.0"
 
         const val core = "androidx.camera:camera-core:$camerax_version"
         const val camera2 = "androidx.camera:camera-camera2:$camerax_version"
         // CameraX Lifecycle Library
         const val lifecycle = "androidx.camera:camera-lifecycle:$camerax_version"
         // If you want to additionally use the CameraX View class
-        const val view = "androidx.camera:camera-view:1.0.0-alpha23"
+        const val view = "androidx.camera:camera-view:1.0.0-alpha25"
     }
 }

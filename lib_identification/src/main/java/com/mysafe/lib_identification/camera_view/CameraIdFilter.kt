@@ -16,7 +16,7 @@
 package com.mysafe.lib_identification.camera_view
 
 import android.annotation.SuppressLint
-import androidx.annotation.experimental.UseExperimental
+import androidx.annotation.OptIn
 import androidx.camera.core.CameraFilter
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector.LensFacing
@@ -28,7 +28,7 @@ import java.util.*
 /**
  * A filter that filters camera based on camera Id.
  */
-@UseExperimental(markerClass = ExperimentalCameraFilter::class)
+@OptIn(markerClass = [ExperimentalCameraFilter::class])
 class CameraIdFilter(@field:LensFacing
                      /** Returns the lens facing associated with this lens facing camera id filter.  */
                      @get:LensFacing

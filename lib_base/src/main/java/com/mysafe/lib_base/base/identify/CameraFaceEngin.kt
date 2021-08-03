@@ -1,7 +1,9 @@
-package com.mysafe.lib_identification.face_engin
+package com.mysafe.lib_base.base
 
+import android.content.Context
 import com.mysafe.lib_base.base.identify.FaceRectInfo
-import com.mysafe.lib_identification.helper.IRecogniseResultCallback
+import com.mysafe.lib_base.base.identify.IRecogniseResultCallback
+
 
 /**
  * @author Create By 张晋铭
@@ -14,7 +16,7 @@ abstract class CameraFaceEngine {
     /**
      * 初始化引擎
      */
-    abstract fun initEngine()
+    abstract fun initEngine(mContext: Context)
 
     /**
      * 帧图片识别
